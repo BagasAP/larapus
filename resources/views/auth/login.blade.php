@@ -20,7 +20,7 @@
                     <div class="form-group{{ $errors->has('password') ? 'has-error' : ''}}">
                         {!!Form::label('password','Password', ['class'=>'col-md-4 control-label'])!!}
                         <div class="col-md-6">
-                            {!!Form::password('pasword', ['class'=>'form-control'])!!}
+                            {!!Form::password('password', ['class'=>'form-control'])!!}
                             {!!$errors->first('password', '<p class="help-block">:message</p>')!!}
                         </div>
                     </div>
