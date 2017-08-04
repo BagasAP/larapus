@@ -12,8 +12,10 @@
 
     <!-- Styles -->
     <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="/css/bootrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="/css/bootsrap.min.css" rel="stylesheet">
+    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
+    <link href="/css/jquery.dataTables.css" rel="stylesheet">
+    <link href="/css/dataTables.bootstrap.css" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -40,6 +42,7 @@
                     <ul class="nav navbar-nav">
                         @if(Auth::check())
                         <li><a href="{{ url('/home')}}"> Dashboard</a></li>
+                        <li><a href="{{ route('authors.index')}}">Penulis</a></li>
                         @endif
                     </ul>
 
@@ -57,13 +60,13 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ route('logout') }}"
+                                        <a href="{{ url('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ url('logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
@@ -79,8 +82,9 @@
     </div>
 
     <!-- Scripts -->
-    <script src="/js/jquery-3.1.0.min.js"></script>
-    <script src="/js/bootsrap.min.js"></script>
-    @yield('scripts')
+    <script src="/js/app.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.bootstrap.min.js"></script>
+        @yield('scripts')
 </body>
 </html>
