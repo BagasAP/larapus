@@ -16,6 +16,8 @@
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
     <link href="/css/jquery.dataTables.css" rel="stylesheet">
     <link href="/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/css/selectize.css" rel="stylesheet">
+    <link href="/css/selectize.bootstrap3.css" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -45,6 +47,10 @@
                         <li><a href="{{ route('authors.index')}}">Penulis</a></li>
                         <li><a href="{{ route('books.index')}}">Buku</a></li>
                         @endif
+
+                        <!-- @role('admin')
+                        <li><a href="{{ route('authors.index')}}">Penulis</a></li>
+                        @endrole -->
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -83,6 +89,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="/js/selectize.min.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/jquery.dataTables.min.js"></script>
     <script src="/js/dataTables.bootstrap.min.js"></script>

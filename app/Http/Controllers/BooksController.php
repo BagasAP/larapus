@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Html\Builder;
 use Yajra\Datatables\Datatables;
 use App\Book;
+use Session;
+use Illuminate\Support\Facades\File;
+use App\Http\Requests\UpdateBookRequest;
+use App\Http\Requests\StoreBookRequest;
 
-use Illuminate\Support\Facades\Session;
+
+use Illuminate\Support\Facades\Auth;
 
 class BooksController extends Controller
 {
@@ -18,8 +23,9 @@ class BooksController extends Controller
      */
     public function index(Request $request, Builder $htmlBuilder)
     {
-        if ($request->ajax()){
-            $books = Book::all();
+        if ($request->ajax())
+        {
+            $books = Book::with('author');
             return Datatables::of($books)
             ->addColumn('action', function($book){
                 return view('datatable._action',[
@@ -32,10 +38,10 @@ class BooksController extends Controller
         }
 
         $html = $htmlBuilder
-        ->addColumn(['data' => 'title', 'name'=>'title', 'title'=>'Judul'])
-        ->addColumn(['data' => 'amount', 'name'=>'amount', 'title'=>'Jumlah'])
-        ->addColumn(['data' => 'author.name', 'name'=>'author.name', 'title'=>'Penulis'])
-        ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searcable'=>false]);
+        ->addColumn(['data' => 'title','name'=>'title','title'=>'Judul'])
+        ->addColumn(['data' => 'amount','name'=>'amount','title'=>'Jumlah'])
+        ->addColumn(['data' => 'author.name','name'=>'author.name','title'=>'Penulis'])
+        ->addColumn(['data' => 'action', 'name'=>'action','title'=>'','orderable'=>false, 'searcable'=>false]);
 
         return view('books.index')->with(compact('html'));
     }
@@ -57,15 +63,10 @@ class BooksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
         //
-        $this->validate($request, [
-            'title' => 'required',
-            'auhtor_id' => 'required|exist:authors.id',
-            'amount' => 'required|numeric',
-            'cover' => 'image|max:2048'
-            ]);
+   
 
         $book = Book::create($request->except('cover'));
 
@@ -131,6 +132,50 @@ class BooksController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, [
+            'title' => 'required|unique:books,title,'.$id,
+            'auhtor_id' => 'required|exist:author.id',
+            'amount' => 'required|numeric',
+            'cover' => 'image|max:2048'
+            ]);
+
+        $book = Book::find($id);
+        $book->update($request->all());
+     
+
+        if($request->hasFile('cover')){
+            //mengambil cover yg di upload brikut ekstensinya
+            $filename = null;
+            $uploaded_cover = $request->file('cover');
+            $extension = $uploaded_cover->getClientOriginalExtension();
+
+            //membuat nama file random dengan extension
+            $filename = md5(time()).'.'.$extension;
+            $destinationPath = public_path().DIRECTORY_SEPARATOR.'img';
+
+            //memindahkan file ke folder public/img
+            $uploaded_cover->move($destinationPath, $filename);
+
+            //hapus cover lama, jika ada
+            if ($book->cover) {
+                $old_cover = $book->cover;
+                $filepath = public_path().DIRECTORY_SEPARATOR.'img'
+                .DIRECTORY_SEPARATOR.$book->cover;
+                try {
+                  File::delete($filepath);  
+                } catch(FileNotFoundExection $e) {
+                    //file sudah dihapus/tidak ada
+                }
+            }
+            //ganti field cover yg baru
+            $book->cover = $filename;
+            $book->save();
+        }
+
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Berhasil menyimpan $book->title"]);
+        return redirect()->route('books.index');
     }
 
     /**
@@ -142,5 +187,6 @@ class BooksController extends Controller
     public function destroy($id)
     {
         //
+
     }
 }

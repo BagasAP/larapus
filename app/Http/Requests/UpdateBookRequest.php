@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 /**
 * 
 */
-class UpdateBookRequest extends StoreBookRequest
+class UpdateBookRequest extends Request
 {
 	public function rules()
 	{

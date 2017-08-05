@@ -4,7 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-class StoreBookRequest extends FormRequest
+use Request;
+
+class StoreBookRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

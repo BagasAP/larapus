@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
+	<div class="col-md-12">
 		<ul class="breadcrumb">
 			<li><a href="{{ url('/home')}}">Dashboard</a></li>
 			<li><a href="{{ url('/admin/books')}}">Buku</a></li>
@@ -15,11 +16,12 @@
 
 			<div class="panel-body">
 				{!! Form::open(['url' => route('books.store'),
-				'method' => 'post', 'files'=>'true', 'class'=>'form-horizontal'])!!}
+				'method' => 'post', 'files'=>'true', 'class'=>'form-horizontal']) !!}
 				@include('books._form')
 				{!! Form::close() !!}
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 @endsection
