@@ -11,12 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
-
+Route::get('/','GuestController@index');
+Route::get('/home', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 
 
@@ -25,4 +22,15 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth','role:admin']], function(
 	Route::resource('books','BooksController');
 });
 
+// Route::get('books/{book}/borrow',[
+// 	'middleware' => ['auth', 'role:member'],
+// 	'as' => 'guest.books.borrow',
+// 	'uses' => 'BooksController@borrow'
+// 	]);
 
+
+// Route::put('books/{book}/return',[
+// 	'middleware' => ['auth', 'role:member'],
+// 	'as' => 'member.books.return',
+// 	'uses' => 'BooksController@returnBack'
+// 	]);
